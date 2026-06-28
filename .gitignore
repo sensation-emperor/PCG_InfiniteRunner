@@ -1,0 +1,22 @@
+```
+# Build artifacts
+Binaries/
+Build/
+Intermediate/
+Saved/
+
+# Dependencies
+Plugins/
+
+# Logs
+*.log
+Saved/Config/Windows/
+
+# Editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+```
