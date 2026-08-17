@@ -1,0 +1,29 @@
+# Mathematical Platform Types Reference
+
+## 1. Flat Platform
+- Formula: z = 0
+- Use: Starting areas, rest zones
+- Parameters: length, width
+
+## 2. Wave Platform  
+- Formula: z = A*sin(x*f) + B*cos(y*f/2)
+- A = WaveAmplitude
+- f = WaveFrequency
+- Use: Rhythmic challenges, visual interest
+
+## 3. Noise Platform
+- Formula: z = SimplexNoise(x*s, y*s, 0) * s
+- s = NoiseScale
+- Use: Organic terrain, natural variations
+
+## 4. Spiral Platform
+- Parametric Equations:
+  x = r * cos(theta) * t
+  y = r * sin(theta) * t  
+  z = k * theta
+- Use: Vertical progression, helix paths
+
+## 5. Fractal Platform
+- Recursive subdivision with mathematical patterns
+- Based on Mandelbrot/Julia set principles
+- Use: Complex visual patterns, advanced challenges
