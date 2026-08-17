@@ -1,1 +1,45 @@
-Nothing should be ignored in this case, as the changes only include source files (.md, .js, .html) and no build artifacts, dependencies, or temporary files.
+```
+# Build artifacts
+Binaries/
+Build/
+Saved/
+
+# Configuration
+.Config/
+Intermediate/
+
+# Editor
+.vscode/
+.idea/
+
+# Logs
+*.log
+Saved/Logs/
+
+# Packaged games
+*/WindowsNoEditor/
+*/LinuxNoEditor/
+*/MacNoEditor/
+
+# Visual Studio
+*.VC.db
+*.VC.VC.opendb
+*.sln
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider
+*.DotSettings.user
+*.pidb
+*.userprefs
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Icon?
+```
