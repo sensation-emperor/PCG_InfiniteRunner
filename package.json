@@ -1,0 +1,24 @@
+{
+  "name": "math-runner",
+  "version": "1.0.0",
+  "description": "Procedural 3D infinite runner where all assets, geometry, shaders, and audio are mathematically generated",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "procedural-generation",
+    "threejs",
+    "web-audio-api",
+    "infinite-runner",
+    "webgl",
+    "shaders"
+  ],
+  "author": "sensation-emperor",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.4.14"
+  }
+}

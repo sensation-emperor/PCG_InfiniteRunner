@@ -1,279 +1,90 @@
-# Math-Based 3D Infinite Runner - Feature Plan
+# Math Runner - Web Procedural 3D Infinite Runner Feature Plan
 
 ## Vision
-Create a complete 3D infinite runner game where ALL assets are procedurally generated using mathematical algorithms, eliminating the need for external art assets.
+Create a high-performance web-based 3D infinite runner game where **ALL assets, geometry, shaders, biomes, sound effects, and music are procedurally generated in real-time using mathematical algorithms**, completely eliminating external 3D models, textures, or audio recordings.
 
 ---
 
-## Core Features
+## Core Systems & Architecture
 
-### 1. Procedural Geometry Generation System ⭐ NEW
-**All 3D models generated at runtime using mathematics**
+### 1. Procedural Geometry Generation System
+**All 3D models generated at runtime via mathematical equations**
 
 - **Parametric Mesh Builder**
-  - Generate platforms, obstacles, and decorations using parametric equations
-  - Support for primitives: cubes, cylinders, spheres, cones, toroids
-  - Advanced shapes: superellipsoids, metaballs, noise-displaced surfaces
-  
-- **Procedural Architecture**
-  - Algorithmic building generation (fractal-based structures)
-  - Bridge construction using catenary curves
-  - Tunnel generation with parametric cross-sections
-  - Staircase generation (spiral, straight, switchback)
-  
-- **Organic Elements**
-  - Tree generation using L-systems
-  - Rock formations via Voronoi diagrams + displacement
-  - Terrain patches using Perlin/Simplex noise
-  - Wave-like structures using parametric surfaces
+  - Real-time generation of platforms, obstacles, and collectibles
+  - Primitives: Toroids, Octahedrons, Icosahedrons, Cylinders, Extruded Star Polygons
+  - Advanced math shapes: Parametric surfaces, noise-displaced vertices, spiral helix gantries
+- **Dynamic Procedural Obstacles**
+  - Oscillating Sine-wave Laser Barriers
+  - Rotating Segmented Helix Gates
+  - High Slide Gantries and Elevated Hazard Beams
+  - Parametric Sloped Ramps and Torus Arches
 
-### 2. Enhanced Tile System 🔄 IMPROVED
-**Math-generated tile variations**
+### 2. Real-Time Visual Effects & Shaders
+**Procedural materials, lighting, and GPU-driven effects**
 
-- **Procedural Tile Variants**
-  - Infinite variations of each tile type from parameters
-  - Runtime mesh combination for unique tiles
-  - Parameterized difficulty (width, obstacle density, complexity)
-  
-- **Adaptive Tile Snapping**
-  - Dynamic connection point calculation
-  - Bezier curve transitions between mismatched tiles
-  - Automatic LOD generation based on distance
+- **Shader Materials**
+  - Fresnel rim glow calculation ($I = (1 - N \cdot V)^p$)
+  - Procedural UV step grids and coordinate grid lines
+  - Time-varying trigonometric wave modulation
+- **Dynamic Biome Engine**
+  - **Neon Cyberpunk**: Cyan/Magenta emissive glow with dark floor grid
+  - **Synthwave Sunset**: Coral Rose (`#FF6B9D`) to Sunset Orange (`#FF9A56`) gradient
+  - **Matrix Wireframe**: Emerald digital holographic wireframe grid
+  - **Deep Void**: Obsidian terrain with luminescent gold accents
+  - **Dynamic Biome Transitions**: Continuous interpolation of fog, lighting, and palette every 500m
 
-### 3. Visual Effects System ✨ NEW
-**Shader-based and particle effects**
+### 3. Procedural Audio Synthesizer (Web Audio API)
+**Real-time polyphonic audio generation without external sound files**
 
-- **Procedural Materials**
-  - Generated textures using noise functions
-  - Animated shader patterns (scrolling, pulsing, rotating)
-  - Distance-based color gradients
-  - Holographic/wireframe aesthetic options
-  
-- **Particle Systems**
-  - Math-generated particle emitters
-  - Trail renderers with parametric paths
-  - Collection effects (spiral, explosion, absorption)
-  - Speed boost visualizations
+- **Synthesized Sound Effects**
+  - Jump frequency sweeps with exponential ramp
+  - Pentatonic scale coin collection chimes
+  - Resonant multi-harmonic shield deflection shockwave
+  - Dynamic filter sweeps on power-up activation
+  - Filtered noise burst on collision
+- **Dynamic Polyphonic Background Music**
+  - 16th-note synthesized bass arpeggios synced to player speed
+  - Melodic pentatonic lead progressions
+  - Ambient multi-frequency harmonic drones for Zen Flow mode
 
-### 4. Player Character & Animation 🏃 NEW
-**Procedurally generated character**
+### 4. Game Modes Suite
+- **Classic Endless**: Increasing speed curve, progressive obstacle density, and high-score chase.
+- **Time Attack**: 30-second countdown with collectible Chrono Shards (+5.0s bonus time).
+- **Zen Flow**: Obstacle-free continuous flight mode with relaxing harmonic audio pad synthesis.
 
-- **Geometric Character Design**
-  - Modular robot/geometric character from primitives
-  - Customizable color schemes via parameters
-  - Attach points for power-up visualizations
-  
-- **Procedural Animation**
-  - Inverse kinematics for foot placement
-  - Procedural running cycle (sine-wave based)
-  - Jump arcs using parabolic equations
-  - Slide/dodge animations with interpolation
+### 5. Arcade Power-Up Suite
+- **Shield (15s)**: Kinetic energy barrier absorbing collisions.
+- **Coin Magnet (12s)**: Quadratic distance gravity pull across all lanes.
+- **2X Multiplier (12s)**: Doubled score and coin values.
+- **Hyperdrive Boost (6s)**: 2.2x speed burst with warp particles and invulnerability.
 
-### 5. Power-Up System ⚡ NEW
-**Math-generated collectibles**
-
-- **Collectible Types**
-  - Spinning geometric coins (toroids, dodecahedrons)
-  - Power-up capsules with glow effects
-  - Shield generators (rotating rings)
-  - Speed boosts (arrow/chevron shapes)
-  
-- **Power-Up Effects**
-  - Temporary speed modification
-  - Invincibility shield (sphere visualization)
-  - Magnet for coin collection
-  - Score multiplier zones
-
-### 6. Audio Synthesis System 🎵 NEW
-**Procedurally generated sound**
-
-- **Synthesized SFX**
-  - Jump sounds (frequency sweep)
-  - Collection chimes (pentatonic scale)
-  - Crash/fail sounds (noise burst + decay)
-  - UI feedback tones
-  
-- **Adaptive Music**
-  - Beat-matched to player speed
-  - Difficulty-based intensity layers
-  - Procedural melody generation
-  - Seamless looping segments
-
-### 7. Enhanced Difficulty Director 📈 IMPROVED
-**AI-driven difficulty adjustment**
-
-- **Player Performance Analytics**
-  - Reaction time measurement
-  - Path efficiency tracking
-  - Near-miss detection
-  - Learning curve analysis
-  
-- **Dynamic Generation Rules**
-  - Adaptive obstacle patterns
-  - Breather sections after difficult segments
-  - Skill-based power-up placement
-  - Comeback mechanics for struggling players
-
-### 8. Game Modes 🎮 NEW
-**Multiple gameplay experiences**
-
-- **Classic Endless**
-  - Traditional infinite runner
-  - High score chasing
-  - Daily seed challenges
-  
-- **Time Trial**
-  - Fixed-length courses
-  - Ghost runner comparisons
-  - Checkpoint system
-  
-- **Survival Mode**
-  - Increasing speed over time
-  - Destructible path elements
-  - Last-man-standing gameplay
-  
-- **Zen Mode**
-  - No fail state
-  - Relaxing visuals
-  - Exploratory gameplay
-
-### 9. Visual Themes 🎨 NEW
-**Math-based aesthetic variations**
-
-- **Theme Options**
-  - Neon/Cyberpunk (glowing edges, dark background)
-  - Minimalist (flat colors, simple geometry)
-  - Wireframe (debug-style visualization)
-  - Gradient World (color shifts by distance)
-  - Fractal Dimension (recursive geometry)
-  - Low Poly (faceted appearance)
-  
-- **Environmental Effects**
-  - Fog gradients
-  - Parallax starfield backgrounds
-  - Moving grid floors
-  - Ambient floating particles
-
-### 10. Progression System 🏆 NEW
-**Player advancement**
-
-- **Unlockables**
-  - New character geometries
-  - Color palettes
-  - Trail effects
-  - Background themes
-  
-- **Achievements**
-  - Distance milestones
-  - Collection counts
-  - Perfect run bonuses
-  - Seed-specific challenges
-
-### 11. Social Features 🌐 NEW
-**Community engagement**
-
-- **Seed Sharing**
-  - Convert seeds to shareable codes
-  - Daily challenge seeds
-  - Community-created seed libraries
-  
-- **Leaderboards**
-  - Global high scores
-  - Friend comparisons
-  - Seed-specific rankings
-
-### 12. Technical Features 🔧 NEW
-**Performance and quality**
-
-- **Optimization**
-  - Instanced rendering for repeated geometry
-  - Occlusion culling for obstacles
-  - Pooling system for collectibles/particles
-  - Async mesh generation
-  
-- **Quality Settings**
-  - Adjustable draw distance
-  - LOD thresholds
-  - Particle count limits
-  - Shadow quality levels
-
----
-
-## Implementation Phases
-
-### Phase 1: Core Foundation (Weeks 1-2)
-- [ ] Procedural mesh generation utilities
-- [ ] Basic primitive generators
-- [ ] Math-based tile creation
-- [ ] Simple player controller
-- [ ] Basic collision detection
-
-### Phase 2: Gameplay Loop (Weeks 3-4)
-- [ ] Complete runner mechanics (run, jump, slide)
-- [ ] Collectible system
-- [ ] Score tracking
-- [ ] Death/reset logic
-- [ ] Basic UI (score, distance)
-
-### Phase 3: Visual Enhancement (Weeks 5-6)
-- [ ] Procedural materials/shaders
-- [ ] Particle systems
-- [ ] Multiple visual themes
-- [ ] Character customization
-- [ ] Environmental effects
-
-### Phase 4: Polish & Content (Weeks 7-8)
-- [ ] Audio synthesis
-- [ ] Power-up system
-- [ ] Multiple game modes
-- [ ] Progression system
-- [ ] Settings menu
-
-### Phase 5: Advanced Features (Weeks 9-10)
-- [ ] Enhanced AI director
-- [ ] Social features
-- [ ] Performance optimization
-- [ ] Bug fixes
-- [ ] Tutorial/onboarding
+### 6. Mobile & Desktop Responsive Controls
+- **Desktop**: Arrow keys, WASD, Spacebar, P/ESC for pause.
+- **Mobile Touch**: Touch gesture detector supporting swipes in all 4 directions.
+- **Floating Island Glassmorphic HUD**: High-performance translucent UI with dedicated capsule targets.
 
 ---
 
 ## Technical Stack
 
-### Mathematics Libraries
-- **Geometry**: Custom parametric surface generators
-- **Noise**: Perlin, Simplex, Value noise implementations
-- **Curves**: Bezier, B-spline, NURBS
-- **Fractals**: L-systems, recursive subdivision
-- **Physics**: Basic collision (AABB, sphere, capsule)
-
-### Rendering
-- **Engine**: Unreal Engine 5 (existing) OR Unity OR Web (Three.js)
-- **Shaders**: HLSL/GLSL for procedural materials
-- **Post-processing**: Bloom, color grading, vignette
-
-### Audio
-- **Synthesis**: Oscillator-based (sine, square, saw, triangle)
-- **Effects**: Reverb, delay, filter envelopes
-- **Music**: Procedural composition algorithms
+- **Rendering Engine**: Three.js (WebGL)
+- **Audio Engine**: Web Audio API (native browser audio synthesis)
+- **Build / Dev Tooling**: Vite with `pnpm`
+- **Languages**: HTML5, CSS3 Glassmorphism, Vanilla JavaScript (ES6+)
+- **Asset Overhead**: 0 MB (100% procedural)
 
 ---
 
-## Unique Selling Points
+## Roadmap & Planned Enhancements
 
-1. **Zero External Assets**: Everything generated from code/math
-2. **Infinite Variety**: Procedural generation ensures no two runs identical
-3. **Small Build Size**: No asset bloat, pure algorithmic content
-4. **Deterministic Seeds**: Share exact level experiences
-5. **Educational Value**: Demonstrates mathematical beauty in game design
-6. **Retro-Futuristic Aesthetic**: Embrace the "mathematical" look as a feature
-
----
-
-## Success Metrics
-
-- Smooth 60+ FPS on target hardware
-- Engaging core gameplay loop (retention > 5 minutes average)
-- Visual coherence despite procedural generation
-- Meaningful difficulty progression
-- Positive player feedback on "math art" aesthetic
+- [x] Web-based pure procedural pipeline
+- [x] Multi-mode runner engine (Classic, Time Attack, Zen)
+- [x] Complete power-up suite
+- [x] Dynamic 4-biome transition system
+- [x] Web Audio real-time polyphonic synth
+- [x] Floating Glassmorphism HUD & touch controls
+- [ ] Shareable procedural seed codes with custom challenge generation
+- [ ] Local high-score persistence via `localStorage`
+- [ ] Customizable geometric player avatars (parametric shapes)
+- [ ] WebGL Bloom post-processing pipeline

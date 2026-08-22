@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Math Runner - Procedural 3D Infinite Runner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #FF6B9D 0%, #FF9A56 100%);
+            --primary-glow: rgba(255, 107, 157, 0.45);
+            --cyber-cyan: #00F5FF;
+            --cyber-magenta: #FF007F;
+            --cyber-gold: #FFD700;
+            --cyber-green: #00FF88;
+            --glass-bg: rgba(14, 10, 30, 0.72);
+            --glass-border: rgba(255, 255, 255, 0.16);
+            --glass-highlight: rgba(255, 255, 255, 0.28);
+            --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.35);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        body {
+            overflow: hidden;
+            font-family: 'Outfit', sans-serif;
+            background: #030208;
+            color: #fff;
+            touch-action: none;
+        }
+        
+        #gameCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: block;
+            z-index: 1;
+        }
+
+        /* =========================================
+           FLOATING ISLAND TOP BAR (HUD)
+           ========================================= */
+        #topIslandNav {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 32px);
+            max-width: 980px;
+            height: 64px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid var(--glass-highlight);
+            border-radius: 9999px;
+            box-shadow: var(--glass-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 14px;
+            z-index: 50;
+            transition: all 0.3s ease;
+        }
+
+        .island-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-top: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.15), 0 2px 6px rgba(0,0,0,0.3);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 15px;
+            color: #fff;
+        }
+
+        #scoreValue {
+            color: #FFDF00;
+            text-shadow: 0 0 10px rgba(255, 223, 0, 0.5);
+        }
+
+        #multiplierPill {
+            background: var(--primary-gradient);
+            border: none;
+            color: #fff;
+            display: none;
+            animation: pulseGlow 1.2s infinite alternate;
+        }
+
+        #timerPill {
+            border-color: rgba(255, 75, 75, 0.5);
+            color: #FF5252;
+            display: none;
+        }
+
+        #timerValue {
+            color: #FF5252;
+            text-shadow: 0 0 8px rgba(255, 82, 82, 0.6);
+        }
+
+        #swarmPill {
+            border-color: rgba(0, 245, 255, 0.4);
+            color: #00F5FF;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+        }
+
+        #swarmPill.pop-positive {
+            transform: scale(1.22);
+            border-color: rgba(0, 255, 136, 0.9);
+            box-shadow: 0 0 16px rgba(0, 255, 136, 0.6);
+        }
+
+        #swarmPill.pop-negative {
+            transform: scale(0.9);
+            border-color: rgba(255, 82, 82, 0.9);
+            box-shadow: 0 0 16px rgba(255, 82, 82, 0.6);
+        }
+
+        #swarmCount {
+            color: #00F5FF;
+            font-weight: 800;
+            text-shadow: 0 0 10px rgba(0, 245, 255, 0.6);
+        }
+
+        .hud-action-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #fff;
+            font-size: 18px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+        }
+
+        .hud-action-btn.hud-pill-btn {
+            width: auto;
+            border-radius: 9999px;
+            padding: 0 14px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .hud-action-btn:hover {
+            transform: scale(1.06);
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .hud-action-btn:active {
+            transform: scale(0.94);
+        }
+
+        /* =========================================
+           FLOATING POWER-UPS HUD
+           ========================================= */
+        #activePowerUpsContainer {
+            position: fixed;
+            top: 92px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 45;
+            pointer-events: none;
+        }
+
+        .powerup-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(15, 12, 35, 0.85);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 9999px;
+            padding: 6px 16px 6px 8px;
+            box-shadow: var(--glass-shadow);
+            animation: slideInLeft 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+            min-width: 140px;
+        }
+
+        .powerup-icon-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .powerup-meta {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .powerup-name {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .powerup-bar-bg {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 9999px;
+            overflow: hidden;
+            margin-top: 3px;
+        }
+
+        .powerup-bar-fill {
+            height: 100%;
+            width: 100%;
+            border-radius: 9999px;
+            transition: width 0.1s linear;
+        }
+
+        /* Biome Indicator Pill */
+        #biomePill {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 9999px;
+            padding: 8px 20px;
+            box-shadow: var(--glass-shadow);
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 40;
+            letter-spacing: 0.5px;
+        }
+
+        .biome-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--cyber-cyan);
+            box-shadow: 0 0 10px var(--cyber-cyan);
+        }
+
+        /* =========================================
+           MODALS & OVERLAYS (Skeuomorphic Glass Cards)
+           ========================================= */
+        .game-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(4, 2, 12, 0.82);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 20px;
+            transition: opacity 0.3s ease;
+        }
+
+        #startScreen {
+            background: radial-gradient(circle at 30% 50%, rgba(10, 5, 25, 0.25) 0%, rgba(3, 2, 10, 0.82) 100%);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+
+        @media (min-width: 960px) {
+            #startScreen {
+                justify-content: flex-end;
+                padding-right: 8vw;
+            }
+        }
+
+        .glass-card {
+            width: 100%;
+            max-width: 520px;
+            background: linear-gradient(165deg, rgba(30, 20, 55, 0.85) 0%, rgba(12, 8, 25, 0.95) 100%);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid var(--glass-highlight);
+            border-radius: 28px;
+            padding: 36px 32px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), inset 0 1px 2px rgba(255, 255, 255, 0.25);
+            text-align: center;
+            position: relative;
+        }
+
+        .game-title {
+            font-size: 42px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 24px var(--primary-glow);
+            margin-bottom: 6px;
+        }
+
+        .game-subtitle {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 28px;
+        }
+
+        /* Mode & Theme Selector Tabs */
+        .selector-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .pill-tab-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 6px;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 22px;
+        }
+
+        .pill-tab-group.four-cols {
+            grid-template-columns: repeat(2, 1fr);
+            border-radius: 20px;
+        }
+
+        .pill-tab {
+            background: transparent;
+            border: none;
+            border-radius: 9999px;
+            padding: 10px 8px;
+            color: rgba(255, 255, 255, 0.6);
+            font-family: 'Outfit', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+        }
+
+        .pill-tab.active {
+            background: var(--primary-gradient);
+            color: #fff;
+            box-shadow: 0 4px 14px var(--primary-glow), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+        }
+
+        .pill-tab:hover:not(.active) {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .character-bio-pill {
+            margin-top: 10px;
+            margin-bottom: 6px;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-top: 1px solid rgba(255, 255, 255, 0.22);
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .bio-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--cyber-cyan);
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .bio-desc {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.65);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: right;
+        }
+
+        /* Skeuomorphic Action CTA Button */
+        .cta-pill-button {
+            width: 100%;
+            height: 58px;
+            border-radius: 9999px;
+            background: var(--primary-gradient);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            box-shadow: 0 8px 24px var(--primary-glow), inset 0 2px 2px rgba(255, 255, 255, 0.5);
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .cta-pill-button:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 12px 32px var(--primary-glow), inset 0 2px 2px rgba(255, 255, 255, 0.6);
+        }
+
+        .cta-pill-button:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        .secondary-pill-button {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            margin-top: 10px;
+        }
+
+        .secondary-pill-button:hover {
+            background: rgba(255, 255, 255, 0.16);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Stats Grid for Game Over */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0 24px;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 14px;
+            text-align: left;
+        }
+
+        .stat-card-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .stat-card-val {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            margin-top: 4px;
+        }
+
+        /* Controls Hint Overlay */
+        .controls-hint {
+            margin-top: 20px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.45);
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .kbd-pill {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-family: 'JetBrains Mono', monospace;
+            color: #fff;
+        }
+
+        @keyframes pulseGlow {
+            from { box-shadow: 0 0 10px var(--primary-glow); }
+            to { box-shadow: 0 0 22px var(--primary-glow); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @media (max-width: 680px) {
+            #topIslandNav {
+                height: 56px;
+                padding: 0 10px;
+            }
+            .stat-pill {
+                padding: 4px 8px;
+                font-size: 11px;
+                gap: 4px;
+            }
+            .stat-value {
+                font-size: 13px;
+            }
+            .stat-label {
+                display: none;
+            }
+            .game-title {
+                font-size: 32px;
+            }
+            .glass-card {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- FLOATING ISLAND TOP BAR (HUD) -->
+    <div id="topIslandNav">
+        <div class="island-section">
+            <div class="stat-pill">
+                <span class="stat-label">Score</span>
+                <span class="stat-value" id="scoreValue">0</span>
+            </div>
+            <div class="stat-pill" id="multiplierPill">
+                <span class="stat-value">2X BOOST</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-label">Dist</span>
+                <span class="stat-value" id="distanceValue">0m</span>
+            </div>
+            <div class="stat-pill" id="timerPill">
+                <span class="stat-label">Time</span>
+                <span class="stat-value" id="timerValue">30.0s</span>
+            </div>
+            <div class="stat-pill" id="swarmPill" title="Active Runner Squad">
+                <span class="stat-label">👥 Squad</span>
+                <span class="stat-value" id="swarmCount">1</span>
+            </div>
+        </div>
+
+        <div class="island-section">
+            <div class="stat-pill">
+                <span class="stat-label">Spd</span>
+                <span class="stat-value" id="speedValue">100%</span>
+            </div>
+            <button class="hud-action-btn hud-pill-btn" id="musicTrackBtn" title="Switch Music Genre">🎵 Horizon</button>
+            <button class="hud-action-btn hud-pill-btn" id="bloomToggleBtn" title="Toggle Bloom Glow">✨ Bloom</button>
+            <button class="hud-action-btn" id="audioToggleBtn" title="Toggle Sound">🔊</button>
+            <button class="hud-action-btn" id="pauseToggleBtn" title="Pause Game">⏸</button>
+        </div>
+    </div>
+
+    <!-- FLOATING POWER-UP COOLDOWN BADGES -->
+    <div id="activePowerUpsContainer"></div>
+
+    <!-- FLOATING BIOME PILL -->
+    <div id="biomePill">
+        <div class="biome-dot" id="biomeDot"></div>
+        <span id="biomeName">Neon Cyberpunk</span>
+    </div>
+
+    <!-- START SCREEN MODAL -->
+    <div class="game-modal" id="startScreen">
+        <div class="glass-card">
+            <div class="game-title">MATH RUNNER</div>
+            <div class="game-subtitle">Procedural 3D Infinite Runner · Math Engine</div>
+
+            <div class="selector-label">Select Character (3D Live Preview)</div>
+            <div class="pill-tab-group four-cols" id="characterTabs">
+                <button class="pill-tab active" data-character="robot">⚡ Volt-7</button>
+                <button class="pill-tab" data-character="soldier">🛡️ Vanguard</button>
+                <button class="pill-tab" data-character="xbot">🤖 X-9 Cyber</button>
+                <button class="pill-tab" data-character="droid">🔮 Neo Droid</button>
+            </div>
+            <div id="characterBio" class="character-bio-pill">
+                <span class="bio-name" id="charBioName">Volt-7 Robot</span>
+                <span class="bio-desc" id="charBioDesc">Expressive Rig · Emissive Visor · Agile</span>
+            </div>
+
+            <div class="selector-label">Game Mode</div>
+            <div class="pill-tab-group" id="modeTabs">
+                <button class="pill-tab active" data-mode="classic">Classic</button>
+                <button class="pill-tab" data-mode="timeAttack">Time Attack</button>
+                <button class="pill-tab" data-mode="zen">Zen Flow</button>
+            </div>
+
+            <div class="selector-label">Visual Biome Theme</div>
+            <div class="pill-tab-group four-cols" id="themeTabs">
+                <button class="pill-tab active" data-theme="cyberpunk">Cyberpunk</button>
+                <button class="pill-tab" data-theme="synthwave">Synthwave</button>
+                <button class="pill-tab" data-theme="matrix">Matrix</button>
+                <button class="pill-tab" data-theme="void">Deep Void</button>
+            </div>
+
+            <div class="selector-label">Procedural Soundtrack</div>
+            <div class="pill-tab-group four-cols" id="musicTabs">
+                <button class="pill-tab active" data-music="synthwave">🌆 Horizon</button>
+                <button class="pill-tab" data-music="darksynth">⚡ Darksynth</button>
+                <button class="pill-tab" data-music="chiptune">👾 8-Bit</button>
+                <button class="pill-tab" data-music="zen">🌌 Ambient</button>
+            </div>
+
+            <div class="selector-label">Bloom Glow (Post-Processing)</div>
+            <div class="pill-tab-group" id="bloomTabs">
+                <button class="pill-tab active" data-bloom="high">✨ Ultra Glow</button>
+                <button class="pill-tab" data-bloom="medium">🌟 Balanced</button>
+                <button class="pill-tab" data-bloom="off">Off</button>
+            </div>
+
+            <button class="cta-pill-button" id="startButton">
+                <span>START RUN</span>
+                <span>⚡</span>
+            </button>
+
+            <div class="controls-hint">
+                <span><span class="kbd-pill">W</span> / <span class="kbd-pill">SPACE</span> Jump</span>
+                <span><span class="kbd-pill">S</span> Slide</span>
+                <span><span class="kbd-pill">A</span> / <span class="kbd-pill">D</span> Dodge</span>
+                <span>Swipe on Mobile</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAUSE SCREEN MODAL -->
+    <div class="game-modal" id="pauseScreen" style="display: none;">
+        <div class="glass-card">
+            <div class="game-title">PAUSED</div>
+            <div class="game-subtitle">Take a breather, Runner</div>
+
+            <div class="selector-label">Soundtrack</div>
+            <div class="pill-tab-group four-cols" id="pauseMusicTabs">
+                <button class="pill-tab active" data-music="synthwave">🌆 Horizon</button>
+                <button class="pill-tab" data-music="darksynth">⚡ Darksynth</button>
+                <button class="pill-tab" data-music="chiptune">👾 8-Bit</button>
+                <button class="pill-tab" data-music="zen">🌌 Ambient</button>
+            </div>
+
+            <button class="cta-pill-button" id="resumeButton">
+                <span>RESUME</span>
+                <span>▶</span>
+            </button>
+            <button class="cta-pill-button secondary-pill-button" id="pauseRestartButton">
+                <span>RESTART</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- GAME OVER MODAL -->
+    <div class="game-modal" id="gameOverScreen" style="display: none;">
+        <div class="glass-card">
+            <div class="game-title" id="gameOverTitle">RUN COMPLETE</div>
+            <div class="game-subtitle" id="gameOverReason">Great attempt! Here is your telemetry:</div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-title">Final Score</div>
+                    <div class="stat-card-val" id="finalScoreVal">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-title">Distance Run</div>
+                    <div class="stat-card-val" id="finalDistanceVal">0m</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-title">Coins Collected</div>
+                    <div class="stat-card-val" id="finalCoinsVal">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-title">Power-Ups Used</div>
+                    <div class="stat-card-val" id="finalPowerUpsVal">0</div>
+                </div>
+            </div>
+
+            <button class="cta-pill-button" id="restartButton">
+                <span>TRY AGAIN</span>
+                <span>⚡</span>
+            </button>
+            <button class="cta-pill-button secondary-pill-button" id="menuButton">
+                <span>CHANGE MODE & THEME</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Core Three.js & Loaders -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="assets/js/GLTFLoader.js"></script>
+    
+    <!-- Three.js Post-Processing Shaders & Passes -->
+    <script src="assets/js/postprocessing/EffectComposer.js"></script>
+    <script src="assets/js/postprocessing/CopyShader.js"></script>
+    <script src="assets/js/postprocessing/ShaderPass.js"></script>
+    <script src="assets/js/postprocessing/RenderPass.js"></script>
+    <script src="assets/js/postprocessing/LuminosityHighPassShader.js"></script>
+    <script src="assets/js/postprocessing/UnrealBloomPass.js"></script>
+
+    <!-- Game Engine -->
+    <script src="game.js"></script>
+</body>
+</html>

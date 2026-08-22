@@ -1,152 +1,126 @@
-# Endless Runner Generator - Math-Based Procedural Games
+# Math Runner - Procedural 3D Infinite Runner ⚡
 
-A comprehensive procedural content generation (PCG) system for creating infinite runner games where **all assets can be generated mathematically**. This project includes both an Unreal Engine plugin and a standalone web-based implementation.
-
-## 🎮 Quick Start - Web Version
-
-**Play immediately in your browser!** No installation required.
-
-```bash
-cd WebRunner
-python3 -m http.server 8080
-# Open http://localhost:8080
-```
-
-Or simply open `WebRunner/index.html` in your browser.
-
-## 📁 Project Components
-
-### 1. WebRunner (Browser-Based) ⭐ NEW
-A complete 3D infinite runner built with Three.js where **ALL assets are procedurally generated using mathematics**:
-
-- ✅ Procedural geometry (platforms, obstacles, collectibles)
-- ✅ Shader-based materials with neon effects
-- ✅ Synthesized audio using Web Audio API
-- ✅ Seed-based deterministic generation
-- ✅ Full gameplay loop with scoring
-
-**Features:**
-- Jump, slide, and dodge through math-generated obstacles
-- Collect spinning toroid coins
-- Progressive difficulty with increasing speed
-- Neon cyberpunk aesthetic
-- Zero external art assets
-
-See `WebRunner/README.md` for details.
-
-### 2. Unreal Engine Plugin
-A professional PCG system for Unreal Engine 5 that generates endless runner levels:
-
-- **Asset Scanning & Categorization**: Automatically scans and categorizes UE assets
-- **Tile Library System**: Organizes level segments with metadata
-- **Seed-Based Generation**: Deterministic level generation for reproducible runs
-- **Difficulty Director**: Dynamic difficulty adjustment based on player performance
-- **Automatic Game Generation**: Complete level generation from asset pools
-
-## 📋 Feature Plan
-
-See `FEATURE_PLAN.md` for comprehensive roadmap including:
-
-- ✨ Procedural Geometry Generation System
-- 🎨 Multiple Visual Themes (Neon, Wireframe, Minimalist, etc.)
-- 🏃 Advanced Player Mechanics & Animations
-- ⚡ Power-Up System
-- 🎵 Procedural Audio Synthesis
-- 🎮 Multiple Game Modes
-- 🏆 Progression & Social Features
-
-## 🚀 Getting Started
-
-### Web Version (Immediate Play)
-```bash
-cd WebRunner
-python3 -m http.server 8080
-# Visit http://localhost:8080
-```
-
-### Unreal Engine Plugin
-1. Copy to your UE project's `Plugins` folder
-2. Enable the plugin in project settings
-3. Configure asset pools in the editor
-4. Generate levels using Blueprint or C++
-
-## 📐 Mathematical Techniques Used
-
-The WebRunner demonstrates:
-
-| Category | Techniques |
-|----------|-----------|
-| **Geometry** | Parametric surfaces, extrusion, vertex manipulation |
-| **Noise** | Perlin noise, LCG pseudo-random generation |
-| **Shaders** | Fresnel glow, UV grids, time-based animation |
-| **Physics** | Parabolic arcs, AABB collision, lerp interpolation |
-| **Audio** | Oscillator synthesis, frequency modulation, pentatonic scales |
-
-## 🛠️ Technologies
-
-**WebRunner:**
-- Three.js (3D rendering)
-- Web Audio API (procedural sound)
-- Vanilla JavaScript (no framework dependencies)
-
-**Unreal Plugin:**
-- Unreal Engine 5.x
-- C++
-- Blueprint visual scripting
-
-## 🎯 Controls (WebRunner)
-
-| Action | Key |
-|--------|-----|
-| Jump | SPACE / W / ↑ |
-| Slide | S / ↓ |
-| Move Left | A / ← |
-| Move Right | D / → |
-
-## 📊 Project Structure
-
-```
-/workspace
-├── FEATURE_PLAN.md          # Comprehensive feature roadmap
-├── README.md                # This file
-├── BUILD_INSTRUCTIONS.md    # UE plugin build guide
-├── Source/                  # Unreal Engine C++ source
-│   ├── AssetScanner/
-│   ├── TileLibrary/
-│   ├── SeedEngine/
-│   ├── DifficultyDirector/
-│   └── LevelGenerator/
-└── WebRunner/               # Browser-based game
-    ├── index.html           # Main HTML + UI
-    ├── game.js              # Complete game (~1000 lines)
-    └── README.md            # Web version documentation
-```
-
-## 🎓 Educational Value
-
-This project demonstrates:
-- Applied mathematics in game development
-- Procedural content generation techniques
-- Real-time 3D graphics programming
-- Audio synthesis fundamentals
-- Game physics and collision detection
-- Performance optimization strategies
-
-## 🔮 Future Development
-
-Planned features (see FEATURE_PLAN.md):
-- Power-up system with math-generated effects
-- Multiple game modes (Time Trial, Survival, Zen)
-- Character customization variants
-- Seed sharing and daily challenges
-- Leaderboards and achievements
-- Advanced particle systems
-- Adaptive difficulty AI
-
-## 📄 License
-
-MIT License - See LICENSE file for details
+A complete, fully procedural 3D infinite runner web game with **3D animated character models, smooth skeletal animation state machine, real-time procedural geometry, dynamic visual biomes, and a polyphonic Web Audio synthesizer**!
 
 ---
 
-**Experience the beauty of mathematical game design! 🎮✨**
+## 🎮 Quick Start
+
+You can play immediately either by running a local dev server or directly opening `index.html` in your browser.
+
+### Option 1: Using pnpm & Vite (Recommended)
+
+```bash
+pnpm install
+pnpm dev
+```
+Open `http://localhost:5173` in your browser.
+
+### Option 2: Direct Local Browser Open / Static Server
+
+Simply open `index.html` in any modern web browser or run:
+```bash
+# Python 3
+python -m http.server 8080
+
+# Or Vite preview
+pnpm exec vite preview
+```
+
+---
+
+## ✨ Features & Game Systems
+
+### 1. 🤖 3D Animated Character Roster & Skeletal Animation Suite
+- **⚡ Volt-7 Cyber Robot**: Expressive animated robot with glowing emissive visor, full skeletal rig, and fluid running, jumping, sliding, wave greeting, and crash reactions.
+- **🛡️ Vanguard Commando**: Sci-Fi athletic exo-suit runner with dynamic sprint cycle, athletic jump flips, and slide dives.
+- **🤖 X-9 Cyber Android**: Mixamo-style agile synthetic humanoid with high-reflex movements.
+- **🔮 Neo Procedural Droid**: Pure mathematical geometric avatar with glowing quantum core and trigonometric running limb oscillations.
+- **Live 3D Start Screen Showcase**: Real-time 3D character display in the menu that dynamically updates and plays greeting animations when switching characters.
+- **Dynamic Procedural Banking & Lean**: Characters roll and lean (\(\pm 18^\circ\)) during left/right lane dodges.
+
+### 2. 🕹️ Multi-Mode Game Suite
+- **Classic Endless**: High-octane runner with dynamic speed acceleration, progressive hazard density, and high-score chase.
+- **Time Attack**: Race against a 30.0s countdown clock. Collect glowing **Chrono Shards** to add +5.0s and extend your run.
+- **Zen Flow**: A soothing endless runner mode with zero obstacles or fail states, relaxing ambient harmonic drones, and continuous flow.
+
+### 3. ⚡ Full Arcade Power-Up Suite
+- 🛡️ **Shield (15s)**: Pulsing procedural energy aura that absorbs obstacle collisions without ending the run.
+- 🧲 **Coin Magnet (12s)**: Gravitational quadratic pull drawing coins and shards towards the player across all 3 lanes.
+- ✨ **2X Multiplier (12s)**: Doubles distance score accumulation and coin collection value.
+- 🚀 **Hyperdrive Boost (6s)**: Rocket burst forward at 2.2x speed with procedural warp trail particles and total invulnerability.
+
+### 4. 🎨 Dynamic Visual Biomes & Shaders
+- 🌆 **Neon Cyberpunk**: High-contrast cyan and magenta neon glow with dark reflective floor grids.
+- 🌅 **Synthwave Sunset**: Coral Rose (`#FF6B9D`) to Sunset Orange (`#FF9A56`) gradient aesthetic with retro violet horizon.
+- 🟩 **Matrix Wireframe**: Emerald digital holographic wireframe grid with neon pulse lines.
+- 🌌 **Deep Void**: Obsidian terrain, luminescent gold accents, and starry atmospheric fog.
+- **Dynamic Biome Shifting**: Seamlessly transitions biomes every 500 meters during long runs with color, fog, and shader lerping.
+
+### 5. ✨ Cyberpunk Post-Processing Suite
+- **Selective Unreal Bloom Glow**: Calibrated Bloom post-processing rendering luminous neon tracks, laser gantries, coin halos, and character visors with High / Balanced / Off presets.
+- **Directional Screen Shake Physics**: Impulse-driven harmonic camera shake for jump landings, lane dodges, shield breaks, and fatal obstacle collisions.
+- **Speed Warp Tunnel Shader**: Radial perspective distortion and neon speed lines active during Hyperdrive Boost.
+- **Chromatic Aberration Bursts**: Dynamic RGB channel offset flash upon obstacle impact.
+
+### 6. 🎵 4-Genre Procedural Audio Synthesizer (Web Audio API)
+- **🌆 Horizon (Synthwave)**: 16th-note rolling saw bass arpeggios + soaring pentatonic leads synced to runner speed.
+- **⚡ Darksynth (Industrial Cyberpunk)**: Heavy dual-saw detuned bass + resonant bandpass filter sweeps + industrial noise drums.
+- **👾 8-Bit (Arcade Chiptune)**: Rapid square-wave chord arpeggios + vintage noise snares + chip melodies.
+- **🌌 Ambient (Zen Pad)**: Lush evolving polyphonic harmonic drones for relaxing runs.
+- **3D Spatial Audio Panning**: Web Audio stereo panning accurately positions coins, power-ups, and laser hazards across left/right audio channels as you pass them.
+
+### 7. 📱 Modern Floating Glassmorphism UI
+- **Floating Island Top Bar**: Capsule pill shape (`border-radius: 9999px`), frosted glass (`backdrop-filter: blur(20px)`), and live soundtrack/bloom quality quick toggles.
+- **Active Power-Up Badges**: Animated cooldown timers showing remaining duration.
+- **Mobile Touch Controls**: Full swipe gesture detection (Swipe Up to Jump, Down to Slide, Left/Right to Dodge).
+
+---
+
+## 🎯 Controls
+
+| Action | Desktop Key | Mobile Gesture |
+|---|---|---|
+| **Jump** | `SPACE` / `W` / `↑` | Swipe Up |
+| **Slide** | `S` / `↓` | Swipe Down |
+| **Dodge Left** | `A` / `←` | Swipe Left |
+| **Dodge Right** | `D` / `→` | Swipe Right |
+| **Pause / Resume** | `P` / `ESC` | Pause Button Pill |
+| **Toggle Audio** | `Audio Button` | Audio Button Pill |
+
+---
+
+## 📐 Mathematical Techniques & Algorithms
+
+| Category | Mathematical Concepts & Formulas |
+|---|---|
+| **Geometry** | Parametric equations for Toroids, Cylinders, Octahedrons, Icosahedrons, and Extruded Star Polygons |
+| **Noise & RNG** | 3D Perlin Noise, Linear Congruential Generators (LCG) for deterministic seeds |
+| **Shaders** | Fresnel normal dot product glow, procedural UV step grids, time-varying trigonometric wave modulation |
+| **Physics** | Parabolic trajectory arcs ($y = v_0 t - \frac{1}{2} g t^2$), AABB bounding box collision, lerp interpolation |
+| **Audio** | Polyphonic frequency synthesis, low-pass biquad filter envelopes, pentatonic scale ratios |
+
+---
+
+## 📁 Project Structure
+
+```
+/PCG_InfiniteRunner
+├── assets/
+│   ├── js/GLTFLoader.js   # Standalone Three.js GLTF Loader
+│   └── models/            # 3D GLB Character Models (robot, soldier, xbot)
+├── public/                # Public static assets for dev server & production
+├── index.html             # Floating glassmorphic HUD & character selector modal
+├── game.js                # Engine, 3D animated player, procedural audio synth
+├── package.json           # Web scripts and Vite dev server configuration
+├── pnpm-lock.yaml         # Locked dependencies
+├── FEATURE_PLAN.md        # Architectural roadmap and procedural algorithm design
+├── LICENSE                # MIT License
+└── README.md              # Project documentation
+```
+
+---
+
+## 📄 License
+
+MIT License - Copyright (c) 2026 sensation-emperor.
